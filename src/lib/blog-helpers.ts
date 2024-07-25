@@ -1,4 +1,3 @@
-import fetch from 'node-fetch'
 import { BASE_PATH, REQUEST_TIMEOUT_MS } from '../server-constants'
 import type {
   Block,
@@ -144,9 +143,9 @@ export const getPageLink = (page: number, tag: string) => {
   }
   return tag
     ? pathJoin(
-        BASE_PATH,
-        `/posts/tag/${encodeURIComponent(tag)}/page/${page.toString()}`
-      )
+      BASE_PATH,
+      `/posts/tag/${encodeURIComponent(tag)}/page/${page.toString()}`
+    )
     : pathJoin(BASE_PATH, `/posts/page/${page.toString()}`)
 }
 
