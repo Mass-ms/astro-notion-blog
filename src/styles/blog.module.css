@@ -1,5 +1,5 @@
 .main header {
-  padding: 0 0 20px;
+  padding: 0 0 0;
 }
 
 .main footer {
@@ -23,18 +23,17 @@
 
 .post {
   margin: 0 auto 40px;
-  width: 100%
 }
 
 @media (min-width: 1440px) {
   .postContainer .post {
-    width: calc(50% - 20px);
+    width: calc(30% - 20px);
   }
 }
 
 @media (min-width: 2560px) {
   .postContainer .post {
-    width: calc(33.33% - 20px);
+    width: calc(20% - 20px);
   }
 
   .post {

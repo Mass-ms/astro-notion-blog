@@ -1,0 +1,8 @@
+---
+import { budouxProcess } from '../lib/budoux.ts'
+
+const slotContent = await Astro.slots.render("default");
+const parsed = budouxProcess(slotContent);
+---
+
+<Fragment set:html={parsed} />
