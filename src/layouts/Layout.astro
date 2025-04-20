@@ -166,7 +166,6 @@ if (database.Icon && database.Icon.Type === 'file') {
   .main-content {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     width: fit-content;
   }
 
@@ -175,7 +174,51 @@ if (database.Icon && database.Icon.Type === 'file') {
     justify-self: center;
     width: 60%;
     background: var(--bg);
-    margin: 0 auto;
+    margin-top: 0%;
+    margin-bottom: 0%;
+    margin-right: 10%;
+    margin-left: 20%;
+  }
+
+  @media (max-width: 2560px) {
+    main {
+      order: 0;
+      width: fit-content;
+      margin-top: 0%;
+      margin-bottom: 0%;
+      margin-right: 10%;
+      margin-left: 20%;
+    }
+  }
+  @media (max-width: 2048px) {
+    main {
+      order: 0;
+      width: fit-content;
+      margin-top: 0%;
+      margin-bottom: 0%;
+      margin-right: 5%;
+      margin-left: 15%;
+    }
+  }
+  @media (max-width: 1800px) {
+    main {
+      order: 0;
+      width: fit-content;
+      margin-top: 0%;
+      margin-bottom: 0%;
+      margin-right: 0%;
+      margin-left: 10%;
+    }
+  }
+  @media (max-width: 1600px) {
+    main {
+      order: 0;
+      width: 75%;
+      margin-top: 0%;
+      margin-bottom: 0%;
+      margin-right: 0%;
+      margin-left: 0%;
+    }
   }
 
   @media (max-width: 1200px) {

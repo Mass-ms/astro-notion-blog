@@ -33,12 +33,9 @@
 
 @media (min-width: 2560px) {
   .postContainer .post {
-    width: calc(20% - 20px);
+    width: calc(30% - 20px);
   }
 
-  .post {
-    width: 70%
-  }
 }
 
 
