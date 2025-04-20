@@ -1,0 +1,60 @@
+---
+import { NUMBER_OF_POSTS_PER_PAGE } from '../server-constants.ts'
+import { getDatabase } from '../lib/notion/client.ts'
+import {
+  getPostsByTags,
+  getRankedPosts,
+  getAllTags,
+  getNumberOfPagesByTags,
+} from '../lib/notion/client.ts'
+import Layout from '../layouts/Layout.astro'
+import NoContents from '../components/NoContents.astro'
+import PostDate from '../components/PostDate.astro'
+import PostTags from '../components/PostTags.astro'
+import PostTitle from '../components/PostTitle.astro'
+import PostFeaturedImage from '../components/PostFeaturedImage.astro'
+import PostExcerpt from '../components/PostExcerpt.astro'
+import BlogPostsLink from '../components/BlogPostsLink.astro'
+import BlogTagsLink from '../components/BlogTagsLink.astro'
+import styles from '../styles/blog.module.css'
+
+const database = await getDatabase()
+const { tag } = Astro.params
+
+const blogTagNames = ['DTM', 'お知らせ', '小ネタ', '開発ログ'] // 使用したいタグ名を配列に追加
+
+const [blogPosts, blogRankedPosts, blogTags, blogNumberOfPages] = await Promise.all([
+  getPostsByTags(blogTagNames, 100),
+  getRankedPosts(),
+  getAllTags(),
+  getNumberOfPagesByTags(blogTagNames),
+])
+---
+
+<Layout>
+  <div slot="main" class={styles.main}>
+    <h1>ブログ</h1>
+    <div class={styles.postContainer}>
+      {
+        blogPosts.length === 0 ? (
+          <NoContents contents={blogPosts} />
+        ) : (
+          blogPosts.map((post) => (
+            <div class={styles.post} key={post.Slug}>
+              <PostDate post={post} />
+              <PostFeaturedImage post={post} />
+              <PostTags post={post} />
+              <PostTitle post={post} />
+              <PostExcerpt post={post} />
+            </div>
+          ))
+        )
+      }
+    </div>
+  </div>
+
+  <div slot="aside" class={styles.aside}>
+    <BlogPostsLink heading="Recommended" posts={blogRankedPosts} />
+    <BlogTagsLink heading="Categories" tags={blogTags} />
+  </div>
+</Layout>

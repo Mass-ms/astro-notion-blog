@@ -1,0 +1,80 @@
+---
+import { NUMBER_OF_POSTS_PER_PAGE } from '../server-constants.ts'
+import { getDatabase } from '../lib/notion/client.ts'
+import {
+  getPostsByTags,
+  getRankedPosts,
+  getAllTags,
+  getNumberOfPagesByTags,
+} from '../lib/notion/client.ts'
+import Layout from '../layouts/Layout.astro'
+import NoContents from '../components/NoContents.astro'
+import PostDate from '../components/PostDate.astro'
+import PostTags from '../components/PostTags.astro'
+import PostTitle from '../components/PostTitle.astro'
+import PostFeaturedImage from '../components/PostFeaturedImage.astro'
+import PostExcerpt from '../components/PostExcerpt.astro'
+import BlogPostsLink from '../components/BlogPostsLink.astro'
+import BlogTagsLink from '../components/BlogTagsLink.astro'
+import styles from '../styles/blog.module.css'
+
+const database = await getDatabase()
+const { tag } = Astro.params
+
+const workTagNames = ['参加', '楽曲投稿', '楽曲リリース'] // 使用したいタグ名を配列に追加
+
+const [workPosts, workRankedPosts, workTags, workNumberOfPages] = await Promise.all([
+  getPostsByTags(workTagNames, 50),
+  getRankedPosts(),
+  getAllTags(),
+  getNumberOfPagesByTags(workTagNames),
+])
+---
+
+<Layout>
+    <div slot="main" class={styles.main}>
+      <h1>作品・出演</h1>
+      <div class={styles.postContainer}>
+        {
+          workPosts.length === 0 ? (
+            <NoContents contents={workPosts} />
+          ) : (
+            workPosts.map((post) => (
+              <div class={styles.post} key={post.Slug}>
+                <PostDate post={post} />
+                <PostFeaturedImage post={post} />
+                <PostTags post={post} />
+                <PostTitle post={post} />
+                <PostExcerpt post={post} />
+              </div>
+            ))
+          )
+        }
+      </div>
+    </div>
+  
+    <div slot="aside" class={styles.aside}>
+      <BlogPostsLink heading="Recommended" posts={workRankedPosts} />
+      <BlogTagsLink heading="Categories" tags={workTags} />
+    </div>
+  </Layout>
+  
+  <style>
+    a {
+      padding: 0 10px;
+      color: #fff;
+      background-image: linear-gradient(
+        to right,
+        #34bfff 50%,
+        rgb(137, 190, 214) 50%
+      );
+      background-position: 0 0;
+      background-size: 200% auto;
+      transition: 0.3s;
+    }
+  
+    a:hover {
+      background-position: -100% 0;
+      color: #fff;
+    }
+  </style>

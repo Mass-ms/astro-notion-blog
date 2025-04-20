@@ -176,6 +176,18 @@ export async function getPostsByTag(
     .slice(0, pageSize)
 }
 
+export async function getPostsByTags(
+  tagNames: string[],
+  pageSize = 10
+): Promise<Post[]> {
+  if (!tagNames || tagNames.length === 0) return []
+
+  const allPosts = await getAllPosts()
+  return allPosts
+    .filter((post) => post.Tags.some((tag) => tagNames.includes(tag.name)))
+    .slice(0, pageSize)
+}
+
 // page starts from 1 not 0
 export async function getPostsByPage(page: number): Promise<Post[]> {
   if (page < 1) {
@@ -210,6 +222,25 @@ export async function getPostsByTagAndPage(
   return posts.slice(startIndex, endIndex)
 }
 
+export async function getPostsByTagsAndPage(
+  tagNames: string[],
+  page: number
+): Promise<Post[]> {
+  if (page < 1) {
+    return []
+  }
+
+  const allPosts = await getAllPosts()
+  const posts = allPosts.filter((post) =>
+    post.Tags.some((tag) => tagNames.includes(tag.name))
+  )
+
+  const startIndex = (page - 1) * NUMBER_OF_POSTS_PER_PAGE
+  const endIndex = startIndex + NUMBER_OF_POSTS_PER_PAGE
+
+  return posts.slice(startIndex, endIndex)
+}
+
 export async function getNumberOfPages(): Promise<number> {
   const allPosts = await getAllPosts()
   return (
@@ -222,6 +253,17 @@ export async function getNumberOfPagesByTag(tagName: string): Promise<number> {
   const allPosts = await getAllPosts()
   const posts = allPosts.filter((post) =>
     post.Tags.find((tag) => tag.name === tagName)
+  )
+  return (
+    Math.floor(posts.length / NUMBER_OF_POSTS_PER_PAGE) +
+    (posts.length % NUMBER_OF_POSTS_PER_PAGE > 0 ? 1 : 0)
+  )
+}
+
+export async function getNumberOfPagesByTags(tagNames: string[]): Promise<number> {
+  const allPosts = await getAllPosts()
+  const posts = allPosts.filter((post) =>
+    post.Tags.some((tag) => tagNames.includes(tag.name))
   )
   return (
     Math.floor(posts.length / NUMBER_OF_POSTS_PER_PAGE) +
