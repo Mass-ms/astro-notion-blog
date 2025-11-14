@@ -1,6 +1,6 @@
 ---
 import { Post } from '../lib/interfaces.ts'
-import { filePath } from '../lib/blog-helpers'
+import { filePath, getFallbackImage } from '../lib/blog-helpers'
 import { getPostLink } from '../lib/blog-helpers.ts'
 
 export interface Props {
@@ -11,11 +11,15 @@ const { post } = Astro.props
 
 let image = ''
 if (post.FeaturedImage && post.FeaturedImage.Url) {
+  // FeaturedImageが設定されている場合
   if (import.meta.env.DEV) {
     image = post.FeaturedImage.Url
   } else {
     image = filePath(new URL(post.FeaturedImage.Url))
   }
+} else {
+  // FeaturedImageがない場合はフォールバック画像を使用
+  image = getFallbackImage(post)
 }
 ---
 
